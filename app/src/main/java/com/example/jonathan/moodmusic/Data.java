@@ -29,9 +29,15 @@ public class Data extends AsyncTask<String, String, String>{
             int endPos = info.indexOf(",", pos);
             String temp = info.substring(pos+6, endPos);
             pos = info.indexOf("main");
-            endPos = info.indexOf("\"", pos + 7);
-            String weather = info.substring(pos+7, endPos);
-            return temp + " " + weather;
+            endPos = info.indexOf("\"", pos + 8);
+            String weather = info.substring(pos + 7, endPos);
+            pos = info.indexOf("icon");
+            endPos = info.indexOf("\"", pos + 9);
+            String icon = info.substring(pos+7, endPos);
+            pos = info.indexOf("name");
+            endPos = info.indexOf("\"", pos + 9);
+            String name = info.substring(pos + 7, endPos);
+            return temp + "-" + weather + "-" + icon + "-" + name;
         }
         catch(NetworkOnMainThreadException e){
             return "NMTE";

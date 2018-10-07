@@ -9,8 +9,12 @@
             <shape android:shape="rectangle" >
 
                 <stroke
-                    android:width="100dp"
+                    android:width="10dp"
                     android:color="#00000000" />
+                <size
+                    android:height="100000dp"
+                    android:width="100000dp"
+                    />
 
                 <solid android:color="#E0F2F1" />
             </shape>

@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.support.design.widget.Snackbar;
@@ -168,17 +169,21 @@ public class MainActivity extends AppCompatActivity {
             String baseURL = "https://api.openweathermap.org/data/2.5/weather?lat=" + latitude + "&lon=" + longitude + "&units=imperial&APPID=588a47c2ff108cc1e4dd31dc1a033a32";
             try{
                 Data x = new Data();
-                String[] info = x.execute(baseURL).get().split(" ");
+                String[] info = x.execute(baseURL).get().split("-");
                 String temp=info[0];
                 TextView tv=findViewById(R.id.tv_temperature);
-                tv.setText("");
-                int i=0;
-                for(i=0;i<temp.indexOf('.')-1;i++){
-                    tv.append(temp.charAt(i)+"\n");
-                }
-                tv.append(""+temp.charAt(i));
+                tv.setText(temp.substring(0,temp.indexOf('.')));
+                //Toast.makeText(this,"Going",Toast.LENGTH_SHORT).show();
+                new DownloadImageTask((ImageView) findViewById(R.id.iv_tempearture))
+                        .execute("https://openweathermap.org/img/w/" + info[2] + ".png");
+                Toast.makeText(this,"Going2",Toast.LENGTH_SHORT).show();
+                TextView loc=findViewById(R.id.location_view);
+                loc.setText(info[3]);
+                TextView weather=findViewById(R.id.weather_view);
+                weather.setText(info[1]);
             }
             catch(Exception e){
+                Toast.makeText(this, "Error is "+e.getMessage(),Toast.LENGTH_SHORT).show();
                 Toast.makeText(this,"Error",Toast.LENGTH_SHORT).show();
             }
 
