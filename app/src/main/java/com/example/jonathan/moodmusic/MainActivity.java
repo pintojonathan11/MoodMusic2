@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -15,6 +16,9 @@ import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.AnimationUtils;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -30,7 +34,6 @@ public class MainActivity extends AppCompatActivity {
     private Location lastlocation;
     double latitude;
     double longitude;
-    boolean paused=true;
     private FusedLocationProviderClient mfc;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         TextView temp_tv = findViewById(R.id.tv_temperature);
         TextViewCompat.setAutoSizeTextTypeWithDefaults(temp_tv, TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM);
         mfc = LocationServices.getFusedLocationProviderClient(this);
-
+        initWebView();
     }
 
     @Override
@@ -188,18 +191,32 @@ public class MainActivity extends AppCompatActivity {
             }
 
 
-        }
-        else if(v.getId()==R.id.play_button){
-            if(paused){
-                ((ImageButton)v).setImageResource(R.drawable.ic_pause_black_24dp);
-                paused=false;
-            }
-            else{
-                ((ImageButton)v).setImageResource(R.drawable.ic_play_arrow_black_24dp);
-                paused=true;
-            }
 
         }
+    }
+    private void initWebView() {
+
+        WebView mWebView = (WebView) findViewById(R.id.webview);
+
+
+        WebSettings settings = mWebView.getSettings();
+        settings.setJavaScriptEnabled(true);
+        settings.setAllowFileAccess(true);
+
+        if (Build.VERSION.SDK_INT > 7) {
+            settings.setPluginState(WebSettings.PluginState.ON);
+        }
+
+        else {
+            //settings.setPluginsEnabled(true);
+        }
+
+        String html = "";
+        html += "<html><body>";
+        html += "<iframe width=\"100%\" height=\"166\" scrolling=\"no\" frameborder=\"no\" src=\"https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/34019569&amp;color=0066cc\"></iframe>";
+        html += "</body></html>";
+
+        mWebView.loadData(html, "text/html", null);
     }
 }
 
